@@ -32,22 +32,31 @@ router.post('/previewurl', async function(req, res, next) {
       img: getMetaTags('image'),
       description: getMetaTags('description'),
     }
+
+    var fbPixelTag = `<p> No FB Pixel! </p>`
+
+    /* Checks If FB Pixel is Present */
+    var scripts = $('script').filter(function() {
+      return ($(this).html().indexOf('https://connect.facebook.net/en_US/fbevents.js') > -1);
+    });
+
+    if (scripts.length > 0) {
+      fbPixelTag = `<p> FB Pixel Tag Present! </p>`
+    }
+
     var upperAhref = (metaTagData.url) ? `<a href="` + metaTagData.url + `">` : `<a href="#">`;
     var imgTag = (metaTagData.img) ? `<img src="` + metaTagData.img + `" style="max-height: 200px; max-width: 270px;">` : "";
-    var descriptionTag = (metaTagData.description) ? `<p>` + metaTagData.description +`</p>` : "";
+    var descriptionTag = (metaTagData.description) ? `<p color:white>` + metaTagData.description +`</p>` : "";
     
-    let htmlOutput = `
-    <html>
-      <body>
-      <div style="max-width: 300px; border: solid 1px; padding: 3px; text-align: center;">
+    let htmlOutput = `<div style="max-width: 300px; border: solid 1px; padding: 3px; text-align: center; background-color:#171717; color:white; margin-top: 10px">
         ${upperAhref}
-          <p><strong>Title: ${metaTagData.title}</strong></p>
+          <p><strong>${metaTagData.title}</strong></p>
           ${imgTag}
         </a>
         ${descriptionTag}
-      </div>
-      <body>
-    </html>`
+        ${fbPixelTag}
+      </div>`
+
     res.setHeader('Content-type','text/html')
     res.send(htmlOutput);
   } catch(error){

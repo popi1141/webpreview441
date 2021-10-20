@@ -1,7 +1,6 @@
 
 function previewUrl(){
     let url = document.getElementById("urlInput").value;
-
     getURLPreview(url);
 }
 
