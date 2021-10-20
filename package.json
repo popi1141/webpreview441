@@ -7,9 +7,13 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.10",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "morgan": "~1.9.1"
+    "express": "^4.16.4",
+    "express-handlebars": "^5.3.4",
+    "morgan": "~1.9.1",
+    "node-fetch": "^3.0.0"
   }
 }
