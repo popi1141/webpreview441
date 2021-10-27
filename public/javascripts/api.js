@@ -1,21 +1,34 @@
+const apiVersion = "v2"
+
+
 // this function should call your URL preview api endpoint 
-// it should then call the displayPreviews() function and pass it 
-// the html that was returned from the api endpoint. 
-// if there was an error, call the displayPreviews() function with
+// and return an html string with the preview
+async function getURLPreview(url){
+    try{
+        let response = await fetch(`api/${apiVersion}/previewurl?url=${url}`);
+        let responseText = await response.text();
+        return responseText;
+    }catch(error){
+        return "There was an error: " + error;
+    }
+}
 
+async function loadPostsApi(){
+    let response = await fetch(`api/${apiVersion}/posts`);
+    let postsJson = await response.json();
+    return postsJson;
+}
 
-function getURLPreview(url) {
-    const data = {previewUrl: url}
-    fetch('/api/v1/previewurl', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-    .then(response => response.text())
-    .then(response => displayPreviews(response))
-    .catch(function() {
-        error => displayPreviews(error)
-    });
+async function postUrlApi(url, description, postedBy){
+    const myData = {url: url, description: description, postedBy: postedBy};
+    let status = await fetch(`api/${apiVersion}/posts`,
+        {
+            method: "POST",
+            body: JSON.stringify(myData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    )
+    return status;
 }
