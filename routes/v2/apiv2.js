@@ -67,6 +67,7 @@ router.get('/posts', async function(req, res, next) {
 async function generatePreview(url) {
   const html = await fetch(url).then(res => res.text());
   const $ = cheerio.load(html);
+
   /* Grabs Meta Tags Based on Cheerio */
   const getMetaTags = (name) =>  {
     return(
@@ -78,12 +79,27 @@ async function generatePreview(url) {
       $(`meta[property="twitter:${name}"]`).attr('content')
     );
   }
+
+  const finalDescription = (description) => { 
+    return(
+      description.replace(/[&<>'"]/g, 
+      tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+     }[tag]))
+     ); 
+  }
+
+    
   /* Collates the Relevant Meta Tag Information */
   const metaTagData = {
     url: getMetaTags('url') || url,
     title: getMetaTags('title') || $(`title`).text() || url,
     img: getMetaTags('image'),
-    description: getMetaTags('description'),
+    description: finalDescription(getMetaTags('description')),
   }
 
   var fbPixelTag = `<p> No FB Pixel! </p>`
