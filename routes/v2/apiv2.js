@@ -70,28 +70,28 @@ async function generatePreview(url) {
 
   /* Grabs Meta Tags Based on Cheerio */
   const getMetaTags = (name) =>  {
-    return(
+    let data = (
       $(`meta[name=${name}]`).attr('content') ||
       $(`meta[name="og:${name}"]`).attr('content') ||
       $(`meta[name="twitter:${name}"]`).attr('content') ||
       $(`meta[property=${name}]`).attr('content') ||
       $(`meta[property="og:${name}"]`).attr('content') ||
       $(`meta[property="twitter:${name}"]`).attr('content')
-    );
+    )
+    if (data) {
+      return escapeHTML(data)
+    }
+    return data;
   }
 
-  const finalDescription = (description) => { 
-    return(
-      description.replace(/[&<>'"]/g, 
-      tag => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#39;',
-        '"': '&quot;'
-     }[tag]))
-     ); 
-  }
+  const escapeHTML = str => str.replace(/[&<>'"]/g, 
+  tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag]));
 
     
   /* Collates the Relevant Meta Tag Information */
@@ -99,7 +99,7 @@ async function generatePreview(url) {
     url: getMetaTags('url') || url,
     title: getMetaTags('title') || $(`title`).text() || url,
     img: getMetaTags('image'),
-    description: finalDescription(getMetaTags('description')),
+    description: getMetaTags('description'),
   }
 
   var fbPixelTag = `<p> No FB Pixel! </p>`
