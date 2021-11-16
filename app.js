@@ -19,7 +19,7 @@ const appSettings = {
         clientSecret: "VIe7Q~6gkdxfi41RGm.s2pjupc6Tve5PJ2fmP" // alt. client certificate or key vault credential
     },
     authRoutes: {
-        redirect: "https://webpreview.justinbanusing.com",
+        redirect: "https://webpreview.justinbanusing.com/redirect",
         error: "/error", // the wrapper will redirect to this route in case of any error.
         unauthorized: "/unauthorized" // the wrapper will redirect to this route in case of unauthorized access attempt.
     }
