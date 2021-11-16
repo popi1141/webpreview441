@@ -22,6 +22,18 @@ async function main() {
   Post = mongoose.model('Post', postSchema);
 }
 
+/* GET user identity */
+router.get('/getIdentity', function(req, res, next) {
+  let session=req.session;
+  if(session.isAuthenticated){
+    var name = session.account.name;
+    var username = session.account.username;
+    res.json({status:"loggedin",userInfo: {name: name, username: username}})
+  } else {
+    res.json({ status: 'loggedout' })
+  }
+});
+
 /* Basic Endpoint */
 router.get('/', function(req, res, next) {
   res.send('Input a url!');
@@ -29,18 +41,22 @@ router.get('/', function(req, res, next) {
 
 /* POST posts handler */
 router.post('/posts', async function(req, res, next) {
-  console.log(req.body);
-  try{
-    const newPost = new Post({
-      url: req.body.url,
-      description: req.body.description,
-      postedBy: req.body.postedBy,
-      created_date: Date.now()
-    });
-    await newPost.save();
-    res.json({ status: 'success' }) 
-  }catch(error){
-    res.json({ status: 'error:' + error })
+  let session=req.session;
+  if(session.isAuthenticated){
+    try{
+      const newPost = new Post({
+        url: req.body.url,
+        description: req.body.description,
+        postedBy: req.body.postedBy,
+        created_date: Date.now()
+      });
+      await newPost.save();
+      res.json({ status: 'success' }) 
+    }catch(error){
+      res.json({ status: 'error:' + error })
+    }
+  } else {
+    res.json({ status: 'error', error: "not logged in" })
   }
 });
 
