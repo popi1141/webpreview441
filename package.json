@@ -14,7 +14,7 @@
     "express": "^4.16.4",
     "express-handlebars": "^5.3.4",
     "express-session": "^1.17.2",
-    "microsoft-identity-express": "github:azure-samples/microsoft-identity-express",
+    "microsoft-identity-express": "git+https://github.com/Azure-Samples/microsoft-identity-express.git",
     "mongoose": "^6.0.12",
     "morgan": "~1.9.1",
     "node-fetch": "^3.0.0"
